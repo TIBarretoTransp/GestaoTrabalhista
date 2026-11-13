@@ -1,0 +1,141 @@
+[
+ {
+  "arquivo": "contrato_motorista_indeterminado.docx",
+  "modelo": "Contrato Individual de Trabalho — Motorista Carreteiro (prazo indeterminado)",
+  "marcadores": [
+   "acao.data_documento",
+   "acao.escala_horario",
+   "acao.jornada_horas_diarias",
+   "acao.jornada_horas_semanais",
+   "colaborador.cpf",
+   "colaborador.data_admissao",
+   "colaborador.data_nascimento",
+   "colaborador.email",
+   "colaborador.endereco_completo",
+   "colaborador.nome",
+   "colaborador.rg",
+   "colaborador.rg_orgao",
+   "colaborador.salario",
+   "colaborador.telefone"
+  ]
+ },
+ {
+  "arquivo": "contrato_motorista_experiencia.docx",
+  "modelo": "Contrato Individual de Trabalho — Motorista Carreteiro (experiência)",
+  "marcadores": [
+   "acao.data_documento",
+   "acao.escala_horario",
+   "acao.experiencia_dias",
+   "acao.experiencia_fim",
+   "acao.experiencia_inicio",
+   "acao.jornada_horas_diarias",
+   "acao.jornada_horas_semanais",
+   "colaborador.cpf",
+   "colaborador.data_admissao",
+   "colaborador.data_nascimento",
+   "colaborador.email",
+   "colaborador.endereco_completo",
+   "colaborador.nome",
+   "colaborador.rg",
+   "colaborador.rg_orgao",
+   "colaborador.salario",
+   "colaborador.telefone"
+  ]
+ },
+ {
+  "arquivo": "politica_beneficios.docx",
+  "modelo": "Política Interna de Benefícios e Reconhecimento",
+  "marcadores": []
+ },
+ {
+  "arquivo": "termo_ciencia_implantacao_admissao.docx",
+  "modelo": "Termo Individual de Ciência e Implantação — admissão direta",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "termo_alimentacao_cartao.docx",
+  "modelo": "Termo Individual de Alimentação em Cartão",
+  "marcadores": [
+   "acao.data_documento",
+   "acao.data_vigencia",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "regulamento_plano_saude.docx",
+  "modelo": "Regulamento do Plano de Saúde",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "termo_opcao_plano_saude.docx",
+  "modelo": "Termo Individual de Opção e Adesão ao Plano de Saúde",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "termo_nao_opcao_plano_saude.docx",
+  "modelo": "Termo de Não Opção ao Plano de Saúde",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "termo_lgpd.docx",
+  "modelo": "Termo de Ciência sobre Tratamento de Dados (LGPD)",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "aditivo_telemetria.docx",
+  "modelo": "Aditivo de Proteção de Dados e Telemetria",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "acordo_banco_horas.docx",
+  "modelo": "Acordo Individual de Banco de Horas",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "beneficiarios_seguro_vida.docx",
+  "modelo": "Formulário de Indicação de Beneficiários do Seguro de Vida",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ },
+ {
+  "arquivo": "recibo_entrega_admissao_motorista.docx",
+  "modelo": "Recibo de Entrega de Documentos — Motorista, admissão direta",
+  "marcadores": [
+   "acao.data_documento",
+   "colaborador.cpf",
+   "colaborador.nome"
+  ]
+ }
+]
