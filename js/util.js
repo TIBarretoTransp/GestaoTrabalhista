@@ -1,4 +1,5 @@
 // Utilitários de interface
+import { icone } from './icones.js';
 
 export const esc = v => String(v ?? '').replace(/[&<>"']/g, c =>
   ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -9,7 +10,7 @@ export const $$ = (sel, raiz = document) => [...raiz.querySelectorAll(sel)];
 export function aviso(msg, tipo = '') {
   const el = document.createElement('div');
   el.className = 'aviso ' + tipo;
-  el.textContent = msg;
+  el.innerHTML = icone(tipo === 'erro' ? 'alerta' : tipo === 'ok' ? 'checkCirculo' : 'info') + `<span>${esc(msg)}</span>`;
   $('#avisos').appendChild(el);
   setTimeout(() => el.remove(), tipo === 'erro' ? 8000 : 4000);
 }
@@ -29,12 +30,28 @@ export function dataBR(v) {
 export function dataHoraBR(v) {
   if (!v) return '—';
   const d = new Date(v);
-  return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+export function quandoRelativo(v) {
+  if (!v) return '';
+  const s = (Date.now() - new Date(v).getTime()) / 1000;
+  if (s < 60) return 'agora';
+  if (s < 3600) return `há ${Math.floor(s / 60)} min`;
+  if (s < 86400) return `há ${Math.floor(s / 3600)} h`;
+  const d = Math.floor(s / 86400);
+  return d === 1 ? 'ontem' : `há ${d} dias`;
 }
 
 export function hojeISO() {
   const d = new Date();
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+}
+
+export function somarDias(iso, dias) {
+  const d = new Date(iso + 'T12:00:00');
+  d.setDate(d.getDate() + dias);
+  return d.toISOString().slice(0, 10);
 }
 
 export function slug(t) {
@@ -68,8 +85,7 @@ export function escolherArquivo(accept) {
   });
 }
 
-// Diálogo modal simples. botoes: [{ texto, valor, classe }]. Retorna o valor clicado
-// e os dados do formulário (se houver <form> no corpo).
+// Diálogo modal. botoes: [{ texto, valor, classe }]. Retorna { valor, dados }.
 export function dialogo({ titulo, corpo, botoes = [{ texto: 'OK', valor: true, classe: 'btn-primario' }] }) {
   return new Promise(ok => {
     const dlg = document.createElement('dialog');
@@ -92,7 +108,7 @@ export function dialogo({ titulo, corpo, botoes = [{ texto: 'OK', valor: true, c
       else ok({ valor: botoes[+v].valor, dados });
     });
     dlg.showModal();
-    const primeiro = dlg.querySelector('input, select, textarea');
+    const primeiro = dlg.querySelector('.dlg-corpo input, .dlg-corpo select, .dlg-corpo textarea');
     if (primeiro) primeiro.focus();
   });
 }
@@ -101,10 +117,10 @@ export const confirmar = (titulo, texto, textoBotao = 'Confirmar', classe = 'btn
   dialogo({ titulo, corpo: `<p>${texto}</p>`, botoes: [{ texto: textoBotao, valor: true, classe }] })
     .then(r => r.valor === true);
 
-const ETQ_STATUS = {
+const ETQ = {
   gerado: ['Gerado', 'cinza'],
   aguardando_assinatura: ['Aguardando assinatura', 'amarelo'],
-  assinado: ['Assinado — conferir', 'azul'],
+  assinado: ['A conferir', 'roxo'],
   conferido: ['Conferido', 'verde'],
   rejeitado: ['Rejeitado', 'vermelho'],
   dispensado: ['Dispensado', 'cinza'],
@@ -118,6 +134,26 @@ const ETQ_STATUS = {
   desligado: ['Desligado', 'cinza'],
 };
 export function etiqueta(status) {
-  const [t, c] = ETQ_STATUS[status] || [status, 'cinza'];
+  const [t, c] = ETQ[status] || [status, 'cinza'];
   return `<span class="etq etq-${c}">${esc(t)}</span>`;
 }
+
+const CORES_AVATAR = ['#0b2c6b', '#1f5fbf', '#dd7d08', '#12805c', '#5b4bc4', '#b5476b', '#2a7f9e', '#7a5c2e'];
+export function avatar(nome, tam = '') {
+  const partes = String(nome || '?').trim().split(/\s+/);
+  const ini = ((partes[0]?.[0] || '') + (partes.length > 1 ? partes.at(-1)[0] : '')).toUpperCase();
+  let h = 0; for (const ch of String(nome)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return `<div class="avatar ${tam}" style="background:${CORES_AVATAR[h % CORES_AVATAR.length]}">${esc(ini)}</div>`;
+}
+
+export function barra(feitos, total) {
+  const pct = total ? Math.round((feitos / total) * 100) : 0;
+  return `<div class="progresso ${total && feitos >= total ? 'completo' : ''}"><div style="width:${pct}%"></div></div>`;
+}
+
+export function saudacao() {
+  const h = new Date().getHours();
+  return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+}
+
+export function plural(n, um, varios) { return `${n} ${n === 1 ? um : varios}`; }
