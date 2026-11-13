@@ -10,6 +10,10 @@ import {
 const sb = createClient(SUPABASE_URL, SUPABASE_CHAVE, { db: { schema: SCHEMA } });
 const motor = criarMotor({ Docxtemplater, PizZip, expressions });
 const app = $('#app');
+const MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+const MIME_EXT = { pdf: 'application/pdf', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', docx: MIME_DOCX };
+// O Storage valida o tipo do arquivo pelo Blob; garante que ele nunca vá como "octet-stream"
+const comTipo = (dados, tipo) => new Blob([dados], { type: tipo });
 
 // ---------------------------------------------------------------------
 // Estado e cache de cadastros
@@ -513,7 +517,9 @@ async function acaoDocumento(tipoAcao, d, colab) {
       const ext = (arq.name.split('.').pop() || 'pdf').toLowerCase();
       const path = `colaboradores/${colab.id}/${d.acao_id}/${d.id}_assinado_${Date.now()}.${ext}`;
       aviso('Enviando…');
-      const { error } = await sb.storage.from(BUCKET).upload(path, arq, { contentType: arq.type || undefined });
+      const tipo = MIME_EXT[ext] || arq.type;
+      if (!['application/pdf', 'image/jpeg', 'image/png'].includes(tipo)) throw new Error('Envie o assinado em PDF, JPG ou PNG.');
+      const { error } = await sb.storage.from(BUCKET).upload(path, comTipo(arq, tipo), { contentType: tipo });
       if (error) throw error;
       await q(sb.from('documentos_gerados').update({
         status: 'assinado', arquivo_assinado_path: path, assinado_enviado_em: new Date().toISOString(),
@@ -670,8 +676,8 @@ async function gerarAcao({ colab, tipoAcao, dadosAcao, kit, empresa, funcao }) {
     const gerado = motor.gerar(await modeloBlob.arrayBuffer(), dados);
     const docId = crypto.randomUUID();
     const path = `colaboradores/${colab.id}/${acao.id}/${docId}_gerado.docx`;
-    const { error } = await sb.storage.from(BUCKET).upload(path, gerado, {
-      contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    const { error } = await sb.storage.from(BUCKET).upload(path, comTipo(gerado, MIME_DOCX), {
+      contentType: MIME_DOCX,
     });
     if (error) throw new Error(`Envio de "${m.nome}": ${error.message}`);
     let validade = null;
@@ -798,8 +804,8 @@ async function carregarVersao(m, conteudo, nomeArquivo, silencioso = false) {
     motor.gerar(conteudo, montarDados({}));
     const versao = (m.versoes[0]?.versao || 0) + 1;
     const path = `modelos/${m.id}/v${versao}.docx`;
-    const { error } = await sb.storage.from(BUCKET).upload(path, new Blob([conteudo]), {
-      contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', upsert: true,
+    const { error } = await sb.storage.from(BUCKET).upload(path, comTipo(conteudo, MIME_DOCX), {
+      contentType: MIME_DOCX, upsert: true,
     });
     if (error) throw error;
     if (m.ativa) await q(sb.from('documentos_modelo_versoes').update({ ativa: false }).eq('id', m.ativa.id));
